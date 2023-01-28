@@ -4,9 +4,14 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://pg.setka-app.local/setka-app
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_R2DBC_URL: r2dbc:pool:postgres://pg.setka-app.local/setka-app
+      SPRING_R2DBC_USERNAME: postgres
+      SPRING_R2DBC_PASSWORD: postgres
+
+      # SPRING_DATASOURCE_URL: jdbc:postgresql://pg.setka-app.local/setka-app
+      # SPRING_DATASOURCE_USERNAME: postgres
+      # SPRING_DATASOURCE_PASSWORD: postgres
+
       HISTFILE: /app/.local/.bash_history
     ports:
      - 3080:8080

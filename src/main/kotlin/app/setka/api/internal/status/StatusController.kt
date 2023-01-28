@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/internal/status")
-class IndexController {
+class StatusController {
 
   @GetMapping
   fun call (): ResponseEntity<Void> {

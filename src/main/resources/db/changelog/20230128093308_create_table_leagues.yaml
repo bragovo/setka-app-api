@@ -1,0 +1,29 @@
+databaseChangeLog:
+- changeSet:
+    id: 20230128093308_create_table_leagues
+    author: Andrei Brizhinev <bragovo@gmail.com>
+    changes:
+    - createTable:
+        tableName: leagues
+        columns:
+        - column:
+            name: id
+            type: uuid
+            constraints:
+                primaryKey: true
+            defaultValue: uuid_generate_v4()
+        - column:
+            name: name
+            type: varchar(255)
+            constraints:
+                nullable: false
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+            constraints:
+                nullable: false
+        - column:
+            name: updated_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+            constraints:
+                nullable: false
