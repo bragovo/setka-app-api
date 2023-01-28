@@ -24,6 +24,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
   implementation("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("com.h2database:h2")
+  testImplementation(kotlin("test"))
 }
 
 tasks.withType<KotlinCompile> {
