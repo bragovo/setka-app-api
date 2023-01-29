@@ -14,16 +14,17 @@ services:
 
       HISTFILE: /app/.local/.bash_history
     ports:
-     - 3080:8080
+      - 3080:8080
     networks:
-     default:
-       aliases:
-         - api.setka-app.local
+      default:
+        aliases:
+          - api.setka-app.local
     volumes:
-     - ./:/app
-     - gradle-home:/root/.gradle
+      - ./:/app
+      - gradle-home:/root/.gradle
     depends_on:
-     - pg
+      - pg
+      - ga
     stdin_open: true
     tty: true
 
@@ -34,9 +35,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - pg:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql/data
     healthcheck:
-      test: pg_isready -U postgres -d flux
+      test: pg_isready -U postgres -d setka-app
     ports:
       - 5432:5432
     networks:
@@ -44,10 +45,22 @@ services:
         aliases:
           - pg.setka-app.local
 
+  ga:
+    image: grafana/agent
+    environment:
+      GCLOUD_STACK_ID: "524953"
+    volumes:
+      - ga-tmp:/etc/agent/data
+      - ./grafana-agent.yaml:/etc/agent/agent.yaml
+    networks:
+      default:
+        aliases:
+          - ga.setka-app.local
 volumes:
   gradle-home:
-  pg:
+  pg-data:
+  ga-tmp:
 
 networks:
   default:
-    name: setka-app-dev
+    name: setka-app-local

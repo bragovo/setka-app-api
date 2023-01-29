@@ -1,0 +1,13 @@
+metrics:
+  configs:
+  - name: api
+    scrape_configs:
+    - job_name: api
+      metrics_path: /actuator/prometheus
+      static_configs:
+        - targets:
+          - setka-app-api:8080
+
+  global:
+    remote_write:
+    - url: https://prometheus-prod-22-prod-eu-west-3.grafana.net/api/prom/push
