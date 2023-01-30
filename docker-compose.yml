@@ -1,0 +1,70 @@
+services:
+  app: &app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_R2DBC_URL: r2dbc:pool:postgres://pg.setka-app.local/setka-app
+      SPRING_R2DBC_USERNAME: postgres
+      SPRING_R2DBC_PASSWORD: postgres
+
+      # SPRING_DATASOURCE_URL: jdbc:postgresql://pg.setka-app.local/setka-app
+      # SPRING_DATASOURCE_USERNAME: postgres
+      # SPRING_DATASOURCE_PASSWORD: postgres
+
+      SPRING_LIQUIBASE_URL: jdbc:postgresql://pg.setka-app.local/setka-app
+      SPRING_LIQUIBASE_USER: postgres
+      SPRING_LIQUIBASE_PASSWORD: postgres
+
+      HISTFILE: /app/.local/.bash_history
+    ports:
+      - 3080:8080
+    networks:
+      default:
+        aliases:
+          - api.setka-app.local
+    volumes:
+      - ./:/app
+      - gradle-home:/root/.gradle
+    depends_on:
+      - pg
+      - ga
+    stdin_open: true
+    tty: true
+
+  pg:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_DB: setka-app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres -d setka-app
+    ports:
+      - 5432:5432
+    networks:
+      default:
+        aliases:
+          - pg.setka-app.local
+
+  ga:
+    image: grafana/agent
+    environment:
+      GCLOUD_STACK_ID: "524953"
+    volumes:
+      - ga-tmp:/etc/agent/data
+      - ./grafana-agent.yaml:/etc/agent/agent.yaml
+    networks:
+      default:
+        aliases:
+          - ga.setka-app.local
+volumes:
+  gradle-home:
+  pg-data:
+  ga-tmp:
+
+networks:
+  default:
+    name: setka-app-local
